@@ -4,9 +4,9 @@ DROP TABLE if exists dwh_own.dim_calendar_date;
 
 CREATE TABLE dwh_own.dim_calendar_date
 (
-  date_key integer not null,
+  date_key date not null,
   batch_identifier integer not null,
-  date date,
+  date integer not null,
   year double precision,
   month double precision,
   month_name text,

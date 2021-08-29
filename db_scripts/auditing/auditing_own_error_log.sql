@@ -1,6 +1,6 @@
 
 CREATE TABLE auditing_own.error_log (
-	batch_identifier int8 not NULL references auditing_own.batch_information(batch_identifier),
+	batch_identifier int8 not NULL ,
 	process_identifier int8 not null,
 	process_start_time timestamp not NULL,
 	source_system_name text NULL,

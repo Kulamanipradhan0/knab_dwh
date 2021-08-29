@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+
+  postgres:
+    image: "knab_dwh_pg"
+    container_name: "knab_dwh_pg"
+    environment:
+      - POSTGRES_PASSWORD=password
+    ports:
+    - "9000:5432"
+
+  webserver:
+    image: airflow
+    entrypoint: airflow webserver
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./data/logs:/opt/airflow/logs
+
+  scheduler:
+    image: apache/airflow
+    entrypoint: airflow scheduler
+    ports:
+      - "8080:8080"
+    depends_on:
+      - webserver
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./data/logs:/opt/airflow/logs
+
