@@ -57,7 +57,7 @@ insert into auditing_own.error_log (batch_identifier, process_identifier, proces
        error_column, error_column_value, error_description, flag) 
 select * from account_error;
 
--- Load data into vlayer after all validations
+-- Load data into vlayer after all validations (Will be an improvement to be made)
 insert into vlayer_own.account
 select batch_identifier::int, source, txn_date::date, account_no, customer_id, 
        account_type, opening_balance::numeric, closing_balance::numeric 
