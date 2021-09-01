@@ -1,5 +1,0 @@
-﻿update auditing_own.batch_information
-set batch_end_time=now(), batch_status='Completed', batch_success_flag='Y'
-where batch_identifier=
-(select max(batch_identifier) from auditing_own.batch_information 
-where batch_status in ('Started','Error') and batch_end_time is null);
