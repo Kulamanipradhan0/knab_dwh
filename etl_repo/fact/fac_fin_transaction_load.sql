@@ -36,8 +36,8 @@ FROM   stage_own.crm_b
 
 CREATE TEMP TABLE fin_transaction_src AS
 (select t.account_no, c.customer_id,t.txn_datetime,credit_debit_ind, txn_amount, a.opening_balance, t.batch_identifier from fin_transaction t 
-left join stage_own.acnt a on t.account_no=a.account_no
-left join customer c on c.customer_id=a.customer_id );
+join stage_own.acnt a on t.account_no=a.account_no
+join customer c on c.customer_id=a.customer_id );
 
 --Loading fact tables with grain as Account, Customer, Txn time
 insert into dwh_own.fac_fin_transaction
@@ -52,11 +52,10 @@ case when credit_debit_ind='C' then txn_amount else -1*txn_amount end txn_amount
 case when t.credit_debit_ind='C' then txn_amount else 0 end as credited_amount,
 case when t.credit_debit_ind='D' then txn_amount else 0 end as debited_amount
  from fin_transaction_src t
-left join dwh_own.dim_account a on t.account_no=a.account_no and a.active_flag='Y'
-left join dwh_own.dim_customer c on c.customer_id=t.customer_id and c.active_flag='Y'
-left join dwh_own.dim_calendar_date d on d.date_key=date(t.txn_datetime)
-left join dwh_own.dim_calendar_time dt on dt.timeofday=to_char(t.txn_datetime,'HH24:MI') 
-where customer_key is not null
+join dwh_own.dim_account a on t.account_no=a.account_no and a.active_flag='Y'
+join dwh_own.dim_customer c on c.customer_id=t.customer_id and c.active_flag='Y'
+join dwh_own.dim_calendar_date d on d.date_key=date(t.txn_datetime)
+join dwh_own.dim_calendar_time dt on dt.timeofday=to_char(t.txn_datetime,'HH24:MI') 
 )txn;
 
 END;
